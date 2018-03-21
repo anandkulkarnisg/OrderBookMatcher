@@ -9,7 +9,15 @@ int main(int argc, char* argv[])
 	OrderValidator validator;
 	MatchingEngine match;
 
-	ifstream m_inputFileStream("input.txt");
+	if(argc != 2)
+	{
+		std::cout << "Invalid Usage : Proper usage is OrderMatchingEngine [inputfile]" << std::endl;
+		exit(1);
+	}
+	
+	std::string inputFile = argv[1];
+	ifstream m_inputFileStream(inputFile);
+
 	std::string textLine;
 	long lineCount = 0;
 	while(!m_inputFileStream.eof())
