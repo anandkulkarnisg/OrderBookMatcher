@@ -79,21 +79,21 @@ bool operator < (const Order& lhs, const Order& rhs)
 
 bool operator > (const Order& lhs, const Order& rhs)
 {
-    // This is a 2 criteria sorter. First by price. if prices are same then by seqId. The lesser the seqId the earlier the order had come hence it is given priority in the queue.
-    if(lhs.getOrderPrice() > rhs.getOrderPrice())
-    {
-        return true;
-    }
+	// This is a 2 criteria sorter. First by price. if prices are same then by seqId. The lesser the seqId the earlier the order had come hence it is given priority in the queue.
+	if(lhs.getOrderPrice() > rhs.getOrderPrice())
+	{
+		return true;
+	}
 
-    if(rhs.getOrderPrice() < lhs.getOrderPrice())
-    {
-        return false;
-    }
+	if(rhs.getOrderPrice() < lhs.getOrderPrice())
+	{
+		return false;
+	}
 
-    if(lhs.getOrderPrice() == rhs.getOrderPrice())
-    {
-        return(lhs.getSeqId() < rhs.getSeqId());
-    }
+	if(lhs.getOrderPrice() == rhs.getOrderPrice())
+	{
+		return(lhs.getSeqId() < rhs.getSeqId());
+	}
 }
 
 bool operator == (const Order& lhs, const Order& rhs)
@@ -104,17 +104,20 @@ bool operator == (const Order& lhs, const Order& rhs)
 // Construct the order message from the properties.
 std::string Order::getOrderMessage() const
 {
-    // A,100000,B,2,94 
-    std::string str(1, m_actionType);
-    std::string returnMessage = str;returnMessage += ",";
-    returnMessage += std::to_string(m_orderId); returnMessage += ",";
-    returnMessage += m_orderSide; returnMessage += ",";
-    returnMessage += std::to_string(m_orderQty); returnMessage += ",";
-    returnMessage += std::to_string(m_orderPrice);
-    return(returnMessage);
+	// A,100000,B,2,94 
+	std::string str(1, m_actionType);
+	std::string returnMessage = str;returnMessage += ",";
+	returnMessage += std::to_string(m_orderId); returnMessage += ",";
+	returnMessage += m_orderSide; returnMessage += ",";
+	returnMessage += std::to_string(m_orderQty); returnMessage += ",";
+	returnMessage += std::to_string(m_orderPrice);
+	return(returnMessage);
 }
 
-
-
-
-orderType Order::getOrderType() { if(m_orderSide == 'B') return(orderType::buyOrder); else return(orderType::sellOrder); }
+orderType Order::getOrderType() 
+{ 
+	if(m_orderSide == 'B') 
+		return(orderType::buyOrder); 
+	else 
+		return(orderType::sellOrder); 
+}
