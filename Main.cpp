@@ -11,9 +11,11 @@ int main(int argc, char* argv[])
 
 	ifstream m_inputFileStream("input.txt");
 	std::string textLine;
+	long lineCount = 0;
 	while(!m_inputFileStream.eof())
 	{
 		getline(m_inputFileStream,textLine);
+		lineCount++;
 		if(textLine.length()>0)
 		{
 			std::tuple<std::pair<bool,std::string>,Order> message = validator.validateOrder(textLine);
@@ -38,14 +40,17 @@ int main(int argc, char* argv[])
 				match.pushInBadOrder(textLine, messageStatus.second);
 			}
 		}
+
+		// There is a need every 10th Message to print the buy and sell queues. do that here.
+		if(lineCount%10 == 0)
+			match.displayOrderBook();
 	}
 
-	std::cout << "---------------------" << std::endl;
-	match.displayBuyQueue();
-	std::cout << "---------------------" << std::endl;
-	match.displaySellQueue();
-	std::cout << "---------------------" << std::endl;
+	// Display a final summary of any bad orders at the end of execution.
+	std::cout << "Bad order summary : " << std::endl;
 	match.displayBadOrders();
+	std::cout << "Final queue summary : " << std::endl;
+	match.displayOrderBook();
 
 	return(0);
 }
