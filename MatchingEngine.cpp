@@ -124,7 +124,7 @@ void MatchingEngine::displayBadOrders()
 
 void MatchingEngine::runMatching()
 {
-	// dump some logs.
+	// Dump some logs.
 	std::cout << "RunMatching is called" << std::endl;
 
 	// This is the core of matching engine logic.
