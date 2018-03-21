@@ -9,8 +9,6 @@ int main(int argc, char* argv[])
 	OrderValidator validator;
 	MatchingEngine match;
 
-	std::deque<Order> orderDeque;
-
 	ifstream m_inputFileStream("input.txt");
 	std::string textLine;
 	while(!m_inputFileStream.eof())
@@ -34,7 +32,6 @@ int main(int argc, char* argv[])
 				}
 				// Now run the matching engine.
 				match.runMatching();
-				orderDeque.push_back(order);
 			}
 			else
 			{
