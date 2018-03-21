@@ -96,6 +96,11 @@ bool operator > (const Order& lhs, const Order& rhs)
     }
 }
 
+bool operator == (const Order& lhs, const Order& rhs)
+{
+	return(lhs.getOrderId() == rhs.getOrderId()); 
+}
+
 // Construct the order message from the properties.
 std::string Order::getOrderMessage() const
 {
@@ -108,5 +113,8 @@ std::string Order::getOrderMessage() const
     returnMessage += std::to_string(m_orderPrice);
     return(returnMessage);
 }
+
+
+
 
 orderType Order::getOrderType() { if(m_orderSide == 'B') return(orderType::buyOrder); else return(orderType::sellOrder); }

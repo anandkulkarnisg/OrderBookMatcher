@@ -58,6 +58,9 @@ class Order
 		friend bool operator < (const Order& lhs, const Order& rhs);
 		friend bool operator > (const Order& lhs, const Order& rhs);
 
+		// This helps define what it means to be the same order.
+		friend bool operator == (const Order& lhs, const Order& rhs);
+
 		// Find what is the orderType.
 		orderType getOrderType(); 
 

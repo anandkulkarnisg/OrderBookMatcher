@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include "MatchingEngine.h"
+#include<algorithm>
 
 void MatchingEngine::addIntoBuyQueue(const Order& order)
 {
@@ -26,14 +27,8 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
 		{
-			long sizePos = 0;
-			for(auto iter : m_BuyOrderQueue)
-			{
-				if(iter.getOrderId() == order.getOrderId())
-					break;
-				else
-					sizePos++;
-			}
+			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
+			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
 			m_BuyOrderQueue.erase(m_BuyOrderQueue.begin()+sizePos);
 			m_activeOrderSet.erase(iterPos);
 		}
@@ -44,14 +39,8 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
-			long sizePos = 0;
-			for( auto iter : m_BuyOrderQueue)
-			{
-				if(iter.getOrderId() == order.getOrderId())
-					break;
-				else
-					sizePos++;
-			}       
+			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
+			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
 			m_BuyOrderQueue[sizePos] = order;
 		}
 	}
@@ -81,14 +70,8 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
 		{
-			long sizePos = 0;
-			for(auto iter : m_SellOrderQueue)
-			{
-				if(iter.getOrderId() == order.getOrderId())
-					break;
-				else
-					sizePos++;
-			}
+			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
+			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
 			m_SellOrderQueue.erase(m_SellOrderQueue.begin()+sizePos);
 			m_activeOrderSet.erase(iterPos);
 		}
@@ -98,14 +81,8 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
-			long sizePos = 0;
-			for( auto iter : m_SellOrderQueue)
-			{
-				if(iter.getOrderId() == order.getOrderId())
-					break;
-				else
-					sizePos++;
-			}       
+			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
+			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
 			m_SellOrderQueue[sizePos] = order;
 		}
 	}
