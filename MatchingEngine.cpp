@@ -70,8 +70,8 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
 		{
-			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
-			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
+			auto iterFind = find(m_SellOrderQueue.begin(), m_SellOrderQueue.end(), order);
+			auto sizePos = std::distance(m_SellOrderQueue.begin(), iterFind);
 			m_SellOrderQueue.erase(m_SellOrderQueue.begin()+sizePos);
 			m_activeOrderSet.erase(iterPos);
 		}
@@ -81,8 +81,8 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
-			auto iterFind = find(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end(), order);
-			auto sizePos = std::distance(m_BuyOrderQueue.begin(), iterFind);
+			auto iterFind = find(m_SellOrderQueue.begin(), m_SellOrderQueue.end(), order);
+			auto sizePos = std::distance(m_SellOrderQueue.begin(), iterFind);
 			m_SellOrderQueue[sizePos] = order;
 		}
 	}
