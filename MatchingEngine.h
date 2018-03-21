@@ -20,6 +20,8 @@ class MatchingEngine
 		std::deque<Order> m_BuyOrderQueue;
 		std::vector<std::string> m_badOrders;
 		std::set<long> m_activeOrderSet;
+		static double lastTradedPrice;
+		static long lastTradedQty;
 
 	public:
 		void addIntoBuyQueue(const Order& order);

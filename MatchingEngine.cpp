@@ -3,6 +3,9 @@
 #include "MatchingEngine.h"
 #include<algorithm>
 
+double MatchingEngine::lastTradedPrice = 0;
+long MatchingEngine::lastTradedQty = 0;
+
 void MatchingEngine::addIntoBuyQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
@@ -137,8 +140,6 @@ void MatchingEngine::runMatching()
 
 		if( bidOfferSpread <= 0)
 		{
-			long lastTradedQty = 0;
-
 			while(bidOfferSpread <= 0)
 			{
 				// We have definite match of either one or multiple orders from both bid and ask queues. The trade occurs at the sell price.
@@ -150,11 +151,22 @@ void MatchingEngine::runMatching()
 				long sellQty = bestSellOrder.getOrderQty();
 				long buyQty = bestBuyOrder.getOrderQty();
 				long tradeDirection = sellQty - buyQty;
-				lastTradedQty += std::min(sellQty,buyQty);
 
-				std::cout << "T," << std::min(sellQty,buyQty) << ","  << bestSellPrice << "=>" <<  lastTradedQty << "@" << bestSellPrice << std::endl;
+				if(lastTradedPrice != bestSellPrice)
+				{
+					lastTradedPrice = bestSellPrice;
+					lastTradedQty = std::min(sellQty,buyQty);	
+				}	
+				else
+				{
+					lastTradedQty += std::min(sellQty,buyQty);
+				}
+
+				std::cout << "T," << std::min(sellQty,buyQty) << ","  << lastTradedPrice << "=>" <<  lastTradedQty << "@" << lastTradedPrice << std::endl;
 				if(tradeDirection == 0)
 				{
+					std::cout << "INFO : Closing the order ids = " << bestSellOrder.getOrderId() << " , " << bestBuyOrder.getOrderId() << std::endl;
+
 					// First remove the orders from the tracking set.
 					m_activeOrderSet.erase(m_activeOrderSet.find(m_BuyOrderQueue[0].getOrderId()));
 					m_activeOrderSet.erase(m_activeOrderSet.find(m_SellOrderQueue[0].getOrderId()));
@@ -166,12 +178,14 @@ void MatchingEngine::runMatching()
 				{
 					if(tradeDirection>0)
 					{
+						std::cout << "INFO : Closing the order id = " << m_BuyOrderQueue[0].getOrderId() << std::endl;
 						m_activeOrderSet.erase(m_activeOrderSet.find(m_BuyOrderQueue[0].getOrderId()));
 						m_BuyOrderQueue.pop_front();
 						m_SellOrderQueue[0].setOrderQty(tradeDirection);
 					}
 					else
 					{
+						std::cout << "INFO : Closing the order id = " << m_SellOrderQueue[0].getOrderId() << std::endl;
 						m_activeOrderSet.erase(m_activeOrderSet.find(m_SellOrderQueue[0].getOrderId()));
 						m_SellOrderQueue.pop_front();
 						m_BuyOrderQueue[0].setOrderQty(abs(tradeDirection)); // Left amount is always +ve.
