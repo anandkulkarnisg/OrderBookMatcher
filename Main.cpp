@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
 	OrderValidator validator;
-	MatchingEngine match;
+	MatchingEngine stockMatcher;
 
 	if(argc != 2)
 	{
@@ -34,32 +34,31 @@ int main(int argc, char* argv[])
 				Order order = std::get<1>(message);
 				if(order.getOrderType() == orderType::buyOrder)
 				{
-					match.addIntoBuyQueue(order);
+					stockMatcher.addIntoBuyQueue(order);
 				}
 				else
 				{
-					match.addIntoSellQueue(order);
+					stockMatcher.addIntoSellQueue(order);
 				}
-				// Now run the matching engine.
-				match.runMatching();
+				// Now run the stockMatchering engine.
+				stockMatcher.runMatching();
 			}
 			else
 			{
-				match.pushInBadOrder(textLine, messageStatus.second);
+				stockMatcher.pushInBadOrder(textLine, messageStatus.second);
 			}
 		}
 
 		// There is a need every 10th Message to print the buy and sell queues. do that here.
 		if(lineCount%10 == 0)
-			match.displayOrderBook();
+			stockMatcher.displayOrderBook();
 	}
 
 	// Display a final summary of any bad orders at the end of execution.
 	std::cout << "Bad order summary : " << std::endl;
-	match.displayBadOrders();
+	stockMatcher.displayBadOrders();
 	std::cout << "Final queue summary : " << std::endl;
-	match.displayOrderBook();
-
+	stockMatcher.displayOrderBook();
 	return(0);
 }
 

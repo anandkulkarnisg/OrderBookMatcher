@@ -22,12 +22,19 @@ class MatchingEngine
 		std::set<long> m_activeOrderSet;
 		static double lastTradedPrice;
 		static long lastTradedQty;
+		static long lastTradeNumber;
 
 	public:
+
+		static const char orderAddition;
+        static const char orderModify;
+        static const char orderRemove;
+
 		void addIntoBuyQueue(const Order& order);
 		void addIntoSellQueue(const Order& order);
 		void pushInBadOrder(const std::string& orderMessage, const std::string& parseError);
-		MatchingEngine() { }
+		MatchingEngine();
+		~MatchingEngine();
 		void displayBadOrders();
 		void runMatching();
 		void displayBuyQueue();

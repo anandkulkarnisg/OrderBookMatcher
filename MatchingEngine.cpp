@@ -5,11 +5,27 @@
 
 double MatchingEngine::lastTradedPrice = 0;
 long MatchingEngine::lastTradedQty = 0;
+long MatchingEngine::lastTradeNumber = 1543267;
+
+const char MatchingEngine::orderAddition = 'A';
+const char MatchingEngine::orderModify = 'M';
+const char MatchingEngine::orderRemove = 'X';
+
+MatchingEngine::MatchingEngine()
+{
+
+}
+
+MatchingEngine::~MatchingEngine()
+{
+	m_BuyOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
+	m_SellOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
+}
 
 void MatchingEngine::addIntoBuyQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == 'A' )
+	if(order.getActionType() == MatchingEngine::orderAddition )
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -25,7 +41,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 	}
 
 	// If order action is remove.
-	if(order.getActionType() == 'X')
+	if(order.getActionType() == MatchingEngine::orderRemove)
 	{
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
@@ -38,7 +54,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 	}
 
 	// If order action is Modify.
-	if(order.getActionType() == 'M')
+	if(order.getActionType() == MatchingEngine::orderModify)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
@@ -52,7 +68,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 void MatchingEngine::addIntoSellQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == 'A' )
+	if(order.getActionType() == MatchingEngine::orderAddition )
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -68,7 +84,7 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 	}
 
 	// If order action is remove.
-	if(order.getActionType() == 'X')
+	if(order.getActionType() == MatchingEngine::orderRemove)
 	{
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
@@ -80,7 +96,7 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 		}
 	}
 	// If order action is Modify.
-	if(order.getActionType() == 'M')
+	if(order.getActionType() == MatchingEngine::orderModify)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
@@ -162,7 +178,9 @@ void MatchingEngine::runMatching()
 					lastTradedQty += std::min(sellQty,buyQty);
 				}
 
-				std::cout << "T," << std::min(sellQty,buyQty) << ","  << lastTradedPrice << "=>" <<  lastTradedQty << "@" << lastTradedPrice << std::endl;
+				std::cout << "Trade Number = " << lastTradeNumber << ", T," << std::min(sellQty,buyQty) << ","  << lastTradedPrice << "=>" <<  lastTradedQty << "@" << lastTradedPrice << std::endl;
+				lastTradeNumber++;
+
 				if(tradeDirection == 0)
 				{
 					std::cout << "INFO : Closing the order ids = " << bestSellOrder.getOrderId() << " , " << bestBuyOrder.getOrderId() << std::endl;
