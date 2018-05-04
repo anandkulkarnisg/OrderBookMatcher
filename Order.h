@@ -31,6 +31,14 @@ class Order
 
 	public:
 
+		// These are state attributes of the orderActionType which are Addition('A') / Modification('M') / Removal('X') of the order.
+		// Addition is the initial arrival of the Order for first time.
+		// Modification and removal are the other two states of the order.
+	
+        static const char orderAddition;
+        static const char orderModify;
+        static const char orderRemove;
+
 		// Default constructor.
 		Order(const int& , const char , const long& , const char , const long& ,const double& );
 

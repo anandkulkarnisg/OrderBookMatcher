@@ -4,6 +4,11 @@
 
 using namespace std;
 
+// Status Initialization the different types of Orders.
+const char Order::orderAddition = 'A';
+const char Order::orderModify = 'M';
+const char Order::orderRemove = 'X';
+
 // Default constructor implementation.
 Order::Order(const int& seqId, const char actionType, const long& orderId, const char orderSide, const long& orderQty,const double& orderPrice) :            
 	m_seqId(seqId) , m_actionType(actionType), m_orderId(orderId), m_orderSide(orderSide), m_orderQty(orderQty), m_orderPrice(orderPrice)

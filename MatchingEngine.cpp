@@ -7,10 +7,6 @@ double MatchingEngine::lastTradedPrice = 0;
 long MatchingEngine::lastTradedQty = 0;
 long MatchingEngine::lastTradeNumber = 1543267;
 
-const char MatchingEngine::orderAddition = 'A';
-const char MatchingEngine::orderModify = 'M';
-const char MatchingEngine::orderRemove = 'X';
-
 MatchingEngine::MatchingEngine()
 {
 
@@ -25,7 +21,7 @@ MatchingEngine::~MatchingEngine()
 void MatchingEngine::addIntoBuyQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == MatchingEngine::orderAddition )
+	if(order.getActionType() == Order::orderAddition )
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -41,7 +37,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 	}
 
 	// If order action is remove.
-	if(order.getActionType() == MatchingEngine::orderRemove)
+	if(order.getActionType() == Order::orderRemove)
 	{
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
@@ -54,7 +50,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 	}
 
 	// If order action is Modify.
-	if(order.getActionType() == MatchingEngine::orderModify)
+	if(order.getActionType() == Order::orderModify)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{
@@ -68,7 +64,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 void MatchingEngine::addIntoSellQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == MatchingEngine::orderAddition )
+	if(order.getActionType() == Order::orderAddition )
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -84,7 +80,7 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 	}
 
 	// If order action is remove.
-	if(order.getActionType() == MatchingEngine::orderRemove)
+	if(order.getActionType() == Order::orderRemove)
 	{
 		auto iterPos = m_activeOrderSet.find(order.getOrderId());
 		if(iterPos != m_activeOrderSet.end())
@@ -96,7 +92,7 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 		}
 	}
 	// If order action is Modify.
-	if(order.getActionType() == MatchingEngine::orderModify)
+	if(order.getActionType() == Order::orderModify)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) != m_activeOrderSet.end())
 		{

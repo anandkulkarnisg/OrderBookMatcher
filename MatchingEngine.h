@@ -26,10 +26,6 @@ class MatchingEngine
 
 	public:
 
-		static const char orderAddition;
-        static const char orderModify;
-        static const char orderRemove;
-
 		void addIntoBuyQueue(const Order& order);
 		void addIntoSellQueue(const Order& order);
 		void pushInBadOrder(const std::string& orderMessage, const std::string& parseError);
