@@ -9,7 +9,7 @@ long OrderValidator::seqId = 0;
 std::tuple<std::pair<bool,std::string>,Order> OrderValidator::validateOrder(const std::string& inputOrderString)
 {
     // Let us have a blank orderType that is returned and not used if the message parsing fails.
-    Order emptyOrder(-1,'A',0,'B',0,0);
+    Order emptyOrder(-1,Order::orderAddition,0,'B',0,0);
     std::string failMessage = "";
 
     // Now let us try to get the seperate tokens and validate each of them.
@@ -35,7 +35,7 @@ std::tuple<std::pair<bool,std::string>,Order> OrderValidator::validateOrder(cons
     }
 
     // Order type should be either A/X/M.
-    if(std::toupper(orderType[0]) != 'A' && std::toupper(orderType[0]) != 'X' && std::toupper(orderType[0]) != 'M')
+    if(std::toupper(orderType[0]) != Order::orderAddition && std::toupper(orderType[0]) != Order::orderRemove && std::toupper(orderType[0]) != Order::orderModify)
     {
         failMessage = "Invalid order action type : " + orderType + ". It should be either A(Add)/X(Remove)/M(Modify)";
         return(std::make_tuple(std::make_pair(false,failMessage),emptyOrder));
