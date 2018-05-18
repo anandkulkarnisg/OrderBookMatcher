@@ -15,7 +15,6 @@ StockMatcher::StockMatcher(const std::string& symbol, const std::string& dataInp
 
 	// Set here the output file stream type if cout or a file.
 	m_stockMatchEngine.setoutputStreamType(streamType);
-	//m_stockMatchEngine.setoutputStreamType(outputStreamType::fileStream);
 
 	// Set the stock symbol Name here.
 	m_stockMatchEngine.setStockSymbol(symbol);

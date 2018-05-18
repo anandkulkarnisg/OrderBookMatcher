@@ -1,9 +1,10 @@
 #!/bin/bash
 
 rm -f *.o OrderMatchingEngine
-g++ -c Order.cpp
-g++ -c OrderValidator.cpp
-g++ -c MatchingEngine.cpp
-g++ -c Main.cpp
-g++ -c StockMatcher.cpp
+
+for fileItem in $(ls *.cpp)
+do
+	g++ -c $fileItem
+done
+
 g++ *.o -o OrderMatchingEngine
