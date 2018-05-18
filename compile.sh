@@ -5,4 +5,5 @@ g++ -c Order.cpp
 g++ -c OrderValidator.cpp
 g++ -c MatchingEngine.cpp
 g++ -c Main.cpp
+g++ -c StockMatcher.cpp
 g++ *.o -o OrderMatchingEngine

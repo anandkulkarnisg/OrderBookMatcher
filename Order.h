@@ -51,6 +51,9 @@ class Order
 		// Display the properties of an order. required for debugging.
 		void show() const;
 
+		// Get the order details as a message for logging.
+		std::string getOrderDetails() const;
+
 		// Some important getters are needed.
 		int getSeqId() const; 
 		const char getActionType() const; 

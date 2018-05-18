@@ -50,6 +50,19 @@ void Order::show() const
 	std::cout << "OrderPrice = " << m_orderPrice << std::endl;
 }
 
+// Find out the order details.
+std::string Order::getOrderDetails() const
+{
+	std::string returnMessage = "Order seqId = " + std::to_string(m_seqId) + '\n';
+	std::string str(1, m_actionType);
+	returnMessage += "Order ActionType = " + str + '\n';
+	returnMessage += "OrderId = " + std::to_string(m_orderId) + '\n';
+	returnMessage += "OrderSide = " + std::to_string(m_orderSide) + '\n';
+	returnMessage += "OrderQty = " + std::to_string(m_orderQty)+ '\n';
+	returnMessage += "OrderPrice = " + std::to_string(m_orderPrice)  + '\n';
+	return(returnMessage);
+}
+
 // Some very important getters and setters required for the Order. 
 // Getters are below.
 int Order::getSeqId() const { return(m_seqId); }

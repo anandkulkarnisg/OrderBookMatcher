@@ -3,25 +3,60 @@
 #include "MatchingEngine.h"
 #include<algorithm>
 
-double MatchingEngine::lastTradedPrice = 0;
-long MatchingEngine::lastTradedQty = 0;
-long MatchingEngine::lastTradeNumber = 1543267;
+double MatchingEngine::m_lastTradedPrice = 0;
+long MatchingEngine::m_lastTradedQty = 0;
+long MatchingEngine::m_lastTradeNumber = 1543267;
 
-MatchingEngine::MatchingEngine()
-{
-
-}
+MatchingEngine::MatchingEngine() : m_logStreamType(outputStreamType::consoleStream) { }
 
 MatchingEngine::~MatchingEngine()
 {
 	m_BuyOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
 	m_SellOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
+	m_outputFileStream.close();
 }
+
+void MatchingEngine::setoutputStreamType(outputStreamType argStreamType)
+{
+	m_logStreamType = argStreamType;
+}
+
+outputStreamType MatchingEngine::getoutputStreamType()
+{
+	return m_logStreamType;
+}
+
+void MatchingEngine::writeToStream(const std::string& message, std::ostream& os = std::cout)
+{
+	os << message << '\n';
+}
+
+void MatchingEngine::writeToLog(const std::string& logMessage)
+{
+	std::ostream& os = getStreamRef();
+	writeToStream(logMessage, os);
+}
+
+void MatchingEngine::setStockSymbol(const std::string& stockSymbolName) 
+{
+	m_stockSymbol= stockSymbolName;
+	setOutPutLogFileStream();
+} 
+
+void MatchingEngine::setOutPutLogFileStream()
+{
+	// Initialize the file stream for log output here.
+	std::string stockSymbol = getStockSymbol();
+	stockSymbol += ".output.log";
+	m_outputFileStream.open(stockSymbol);	
+}
+
+std::string MatchingEngine::getStockSymbol() { return(m_stockSymbol); }
 
 void MatchingEngine::addIntoBuyQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == Order::orderAddition )
+	if(order.getActionType() == Order::orderAddition)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -64,7 +99,7 @@ void MatchingEngine::addIntoBuyQueue(const Order& order)
 void MatchingEngine::addIntoSellQueue(const Order& order)
 {
 	// If the order action type is Add / A and it is not found in the activeOrderSet then add it.
-	if(order.getActionType() == Order::orderAddition )
+	if(order.getActionType() == Order::orderAddition)
 	{
 		if(m_activeOrderSet.find(order.getOrderId()) == m_activeOrderSet.end())
 		{
@@ -105,14 +140,16 @@ void MatchingEngine::addIntoSellQueue(const Order& order)
 
 void MatchingEngine::displayBuyQueue()
 {
+	std::ostream& os = getStreamRef();
 	for(const auto& iter : m_BuyOrderQueue)
-		iter.show();
+		writeToStream(iter.getOrderDetails(), os);
 }
 
 void MatchingEngine::displaySellQueue()
 {
+	std::ostream& os = getStreamRef();
 	for(const auto& iter : m_SellOrderQueue)
-		iter.show();
+		writeToStream(iter.getOrderDetails(), os);
 }
 
 void MatchingEngine::displayOrderBook()
@@ -130,14 +167,26 @@ void MatchingEngine::pushInBadOrder(const std::string& orderMessage, const std::
 
 void MatchingEngine::displayBadOrders()
 {
+	std::ostream& os = getStreamRef();
 	for(const auto& iter : m_badOrders)
-		std::cout << iter << std::endl;
+		writeToStream(iter, os);
+}
+
+std::ostream& MatchingEngine::getStreamRef()
+{
+	if(getoutputStreamType() == outputStreamType::consoleStream)
+		return(std::cout);
+	else
+		return(m_outputFileStream);
 }
 
 void MatchingEngine::runMatching()
 {
+	// Initialize the logging stream type here.
+	std::ostream& os = getStreamRef();
+
 	// Dump some logs.
-	std::cout << "RunMatching is called" << std::endl;
+	writeToStream("RunMatching is called", os);
 
 	// This is the core of matching engine logic.
 	if(!m_SellOrderQueue.empty() && !m_BuyOrderQueue.empty())
@@ -164,22 +213,27 @@ void MatchingEngine::runMatching()
 				long buyQty = bestBuyOrder.getOrderQty();
 				long tradeDirection = sellQty - buyQty;
 
-				if(lastTradedPrice != bestSellPrice)
+				if(m_lastTradedPrice != bestSellPrice)
 				{
-					lastTradedPrice = bestSellPrice;
-					lastTradedQty = std::min(sellQty,buyQty);	
+					m_lastTradedPrice = bestSellPrice;
+					m_lastTradedQty = std::min(sellQty,buyQty);	
 				}	
 				else
 				{
-					lastTradedQty += std::min(sellQty,buyQty);
+					m_lastTradedQty += std::min(sellQty,buyQty);
 				}
 
-				std::cout << "Trade Number = " << lastTradeNumber << ", T," << std::min(sellQty,buyQty) << ","  << lastTradedPrice << "=>" <<  lastTradedQty << "@" << lastTradedPrice << std::endl;
-				lastTradeNumber++;
+				std::string logMessage = "Trade Number = ";
+				logMessage  += std::to_string(m_lastTradeNumber) + ", T," + std::to_string(std::min(sellQty,buyQty)) + ","  + std::to_string(m_lastTradedPrice) + "=>";
+				logMessage += std::to_string(m_lastTradedQty) + "@" + std::to_string(m_lastTradedPrice);
+				writeToStream(logMessage, os);			
+				m_lastTradeNumber++;
 
 				if(tradeDirection == 0)
 				{
-					std::cout << "INFO : Closing the order ids = " << bestSellOrder.getOrderId() << " , " << bestBuyOrder.getOrderId() << std::endl;
+					std::string logMessage = "INFO : Closing the order ids = ";
+					logMessage += std::to_string(bestSellOrder.getOrderId()) + std::to_string(bestBuyOrder.getOrderId());
+					writeToStream(logMessage, os);
 
 					// First remove the orders from the tracking set.
 					m_activeOrderSet.erase(m_activeOrderSet.find(m_BuyOrderQueue[0].getOrderId()));
@@ -192,14 +246,18 @@ void MatchingEngine::runMatching()
 				{
 					if(tradeDirection>0)
 					{
-						std::cout << "INFO : Closing the order id = " << m_BuyOrderQueue[0].getOrderId() << std::endl;
+						std::string logMessage = "INFO : Closing the order id = ";
+						logMessage += std::to_string(m_BuyOrderQueue[0].getOrderId());
+						writeToStream(logMessage, os);
 						m_activeOrderSet.erase(m_activeOrderSet.find(m_BuyOrderQueue[0].getOrderId()));
 						m_BuyOrderQueue.pop_front();
 						m_SellOrderQueue[0].setOrderQty(tradeDirection);
 					}
 					else
 					{
-						std::cout << "INFO : Closing the order id = " << m_SellOrderQueue[0].getOrderId() << std::endl;
+						std::string logMessage = "INFO : Closing the order id = ";
+						logMessage += std::to_string(m_SellOrderQueue[0].getOrderId());
+						writeToStream(logMessage, os);
 						m_activeOrderSet.erase(m_activeOrderSet.find(m_SellOrderQueue[0].getOrderId()));
 						m_SellOrderQueue.pop_front();
 						m_BuyOrderQueue[0].setOrderQty(abs(tradeDirection)); // Left amount is always +ve.
@@ -221,15 +279,18 @@ void MatchingEngine::runMatching()
 		}
 		else
 		{
-			std::cout << "The best bid is = " << bestBuyPrice << " and the best ask is = " << bestSellPrice << ".No match is possible given bid offer spread is = " << bidOfferSpread << std::endl;
+			std::string logMessage = "The best bid is = " + std::to_string(bestBuyPrice) + " and the best ask is = " + std::to_string(bestSellPrice);
+			logMessage += ".No match is possible given bid offer spread is = ";
+			logMessage += std::to_string(bidOfferSpread);
+			writeToStream(logMessage, os);
 			return;
 		}
 	}
 	else
 	{
 		if(m_SellOrderQueue.empty())
-			std::cout << "The sell queue is empty" << std::endl;
+			writeToStream("The sell queue is empty", os);
 		if(m_BuyOrderQueue.empty())
-			std::cout << "The buy queue is empty" << std::endl;
+			writeToStream("The buy queue is empty", os);
 	}
 }
