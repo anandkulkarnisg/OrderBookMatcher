@@ -4,7 +4,7 @@ rm -f *.o OrderMatchingEngine
 
 for fileItem in $(ls *.cpp)
 do
-	g++ -c $fileItem
+	g++ -c $1 $fileItem
 done
 
-g++ *.o -o OrderMatchingEngine
+g++ $1 *.o -o OrderMatchingEngine
