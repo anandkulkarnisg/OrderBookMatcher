@@ -7,4 +7,4 @@ do
 	g++ -c $1 $fileItem
 done
 
-g++ $1 *.o -o OrderMatchingEngine
+g++ $1 *.o -o OrderMatchingEngine -lpthread

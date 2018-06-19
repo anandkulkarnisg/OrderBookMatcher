@@ -2,6 +2,7 @@
 #include<string>
 #include "MatchingEngine.h"
 #include<algorithm>
+#include<cstdlib>
 
 double MatchingEngine::m_lastTradedPrice = 0;
 long MatchingEngine::m_lastTradedQty = 0;
@@ -14,6 +15,15 @@ MatchingEngine::~MatchingEngine()
 	m_BuyOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
 	m_SellOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
 	m_outputFileStream.close();
+	
+	// If the file is empty and mode is console then delete the file.
+	if(m_logStreamType == outputStreamType::consoleStream)
+	{
+		std::string commandStr = "rm -f ";
+		commandStr += getStockSymbol();
+		commandStr += ".output.log";
+		std::system(commandStr.c_str());
+	}
 }
 
 void MatchingEngine::setoutputStreamType(outputStreamType argStreamType)
@@ -28,7 +38,7 @@ outputStreamType MatchingEngine::getoutputStreamType()
 
 void MatchingEngine::writeToStream(const std::string& message, std::ostream& os = std::cout)
 {
-	os << message << '\n';
+	os << "Thread Id = " << std::this_thread::get_id() << ", Message = " << message << '\n';
 }
 
 void MatchingEngine::writeToLog(const std::string& logMessage)
