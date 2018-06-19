@@ -15,7 +15,7 @@ MatchingEngine::~MatchingEngine()
 	m_BuyOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
 	m_SellOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
 	m_outputFileStream.close();
-	
+
 	// If the file is empty and mode is console then delete the file.
 	if(m_logStreamType == outputStreamType::consoleStream)
 	{
@@ -195,6 +195,8 @@ void MatchingEngine::runMatching()
 	// Initialize the logging stream type here.
 	std::ostream& os = getStreamRef();
 
+	auto startTime = std::chrono::high_resolution_clock::now();
+
 	// Dump some logs.
 	writeToStream("RunMatching is called", os);
 
@@ -303,4 +305,13 @@ void MatchingEngine::runMatching()
 		if(m_BuyOrderQueue.empty())
 			writeToStream("The buy queue is empty", os);
 	}
+
+	auto endTime = std::chrono::high_resolution_clock::now();
+	auto int_ms_long = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+
+	std::string logMessage = "The overall processing and matching took ";
+	logMessage += std::to_string(int_ms_long);
+	logMessage += " micro seconds";
+	writeToStream(logMessage, os);
+
 }

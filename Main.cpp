@@ -37,8 +37,12 @@ int main(int argc, char* argv[])
 	std::vector<std::future<void>> results;
 	results.emplace_back(pool.enqueue(func));
 	std::cout << "Main Thread id = " << std::this_thread::get_id() << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(10));	
-	//std::cout << "Duration = " << measure<std::chrono::milliseconds>::execution(func) << " = Milli Seconds" << std::endl;
+	for(auto&& iter : results)
+	{
+		iter.get();
+		//iter.first.get();	
+		//std::cout << "The execution from thread pool took " << iter.second << " milli seconds" << std::endl;
+	}
 	return(0);
 }
 
