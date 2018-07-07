@@ -1,0 +1,5 @@
+input.txt.testCase1|sintex|F
+input.txt.testCase2|inftec|F
+input.txt.testCase3|wiprot|F
+input.txt.testCase4|myntra|F
+input.txt.testCase5|techma|F
