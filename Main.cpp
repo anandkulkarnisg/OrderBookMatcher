@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 
-	if(argc != 4 || argc != 2)
+	if(argc != 4 && argc != 2)
 	{
 		std::cout << "Invalid Usage : Proper usage is OrderMatchingEngine [inputfile] [symbol] [F/C]" << std::endl;
 		std::cout << "Invalid Usage : Proper usage is OrderMatchingEngine [feedConfigFile]" << std::endl;
