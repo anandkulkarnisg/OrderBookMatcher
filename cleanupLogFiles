@@ -1,0 +1,2 @@
+#!/bin/bash
+rm -f wiprot.output.log sintex.output.log inftec.output.log techma.output.log myntra.output.log
