@@ -41,7 +41,13 @@ void FeedFileHandler::process()
 	// Now iterate through each item and process it by submitting to pool.
 	for(const auto& iter : m_tupleItems)
 	{
-		StockMatcher matcher(std::get<1>(iter), std::get<0>(iter), outputStreamType::fileStream);
+		outputStreamType streamType;
+		if(std::get<2>(iter) == 'F')
+			streamType = outputStreamType::fileStream;
+		else
+			streamType = outputStreamType::consoleStream;
+
+		StockMatcher matcher(std::get<1>(iter), std::get<0>(iter), streamType);
 		auto func = std::bind(&StockMatcher::executeMatching, &matcher);
 		std::vector<std::future<void>> results;
 		results.emplace_back(m_pool.enqueue(func));
