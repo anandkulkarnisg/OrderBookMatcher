@@ -23,8 +23,13 @@ class StockMatcher
 		OrderValidator m_validator;	// This is the validator instance that will check the validity of buy and sell messages.
 		MatchingEngine m_stockMatchEngine;	// This is the stock Matching engine instance which will continuously match and buy and sell queues.
 		std::ifstream m_inputFileStream;	// This is the input file stream from which the stock prices are read until they finish.
+        std::vector<std::string> m_cachedStream; // This is required as ifstream does not seem capable of thread safety and even with locks it does not work.
+		void populateCacheStream();
+
 	public:
-		StockMatcher(const std::string& , const std::string& , const outputStreamType);
+        StockMatcher(const std::string& , const std::string& , const outputStreamType);
+        StockMatcher(const StockMatcher&);
+		StockMatcher& operator=(const StockMatcher&);
 		void executeMatching();
 };
 

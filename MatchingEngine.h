@@ -36,6 +36,9 @@ class MatchingEngine
 		void setOutPutLogFileStream();
 
 	public:
+        MatchingEngine(const MatchingEngine&);
+        MatchingEngine& operator=(const MatchingEngine&);
+		void setOutPutStream();
 		void addIntoBuyQueue(const Order& order);
 		void addIntoSellQueue(const Order& order);
 		void pushInBadOrder(const std::string& orderMessage, const std::string& parseError);

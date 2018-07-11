@@ -38,7 +38,10 @@ void FeedFileHandler::process()
 	// First build the internal tuple items that hold the data for all items to be processed.
 	buildTupleItems();
 
-	// Now iterate through each item and process it by submitting to pool.
+	// Create a vector of matchers each item representing matching of a stock symbol.
+	std::vector<StockMatcher> matchers;
+
+	// Populate the vector now by creating the objects.
 	for(const auto& iter : m_tupleItems)
 	{
 		outputStreamType streamType;
@@ -46,12 +49,21 @@ void FeedFileHandler::process()
 			streamType = outputStreamType::fileStream;
 		else
 			streamType = outputStreamType::consoleStream;
-
 		StockMatcher matcher(std::get<1>(iter), std::get<0>(iter), streamType);
-		auto func = std::bind(&StockMatcher::executeMatching, &matcher);
-		std::vector<std::future<void>> results;
-		results.emplace_back(m_pool.enqueue(func));
-		for(auto&& iter : results)
-			iter.get();
+		matchers.push_back(matcher);
 	}
+
+	// Now create a vector for storing the results.
+	std::vector<std::future<void>> results;
+
+	// Now submit each item of matcher to the threadPool.
+	for(auto& iter : matchers)
+	{
+		auto func = std::bind(&StockMatcher::executeMatching, &iter);			
+		results.emplace_back(m_pool.enqueue(func));		
+	}
+
+	// Now wait for the results.
+	for(auto&& iter : results)
+		iter.get();
 }

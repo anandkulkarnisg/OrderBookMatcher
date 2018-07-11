@@ -10,6 +10,33 @@ long MatchingEngine::m_lastTradeNumber = 1543267;
 
 MatchingEngine::MatchingEngine() : m_logStreamType(outputStreamType::consoleStream) { }
 
+MatchingEngine::MatchingEngine(const MatchingEngine& copyRef)
+{
+	this->m_SellOrderQueue = copyRef.m_SellOrderQueue;
+	this->m_BuyOrderQueue = copyRef.m_BuyOrderQueue;
+	this->m_badOrders = copyRef.m_badOrders;
+	this->m_activeOrderSet = copyRef.m_activeOrderSet;
+	this->m_lastTradedPrice = copyRef.m_lastTradedPrice;
+	this->m_lastTradedQty = copyRef.m_lastTradedQty;
+	this->m_lastTradeNumber = copyRef.m_lastTradeNumber;
+	this->m_logStreamType = copyRef.m_logStreamType;
+	this->m_stockSymbol = copyRef.m_stockSymbol;
+}
+
+MatchingEngine& MatchingEngine::operator=(const MatchingEngine& assignRef)
+{
+	this->m_SellOrderQueue = assignRef.m_SellOrderQueue;
+	this->m_BuyOrderQueue = assignRef.m_BuyOrderQueue;
+	this->m_badOrders = assignRef.m_badOrders;
+	this->m_activeOrderSet = assignRef.m_activeOrderSet;
+	this->m_lastTradedPrice = assignRef.m_lastTradedPrice;
+	this->m_lastTradedQty = assignRef.m_lastTradedQty;
+	this->m_lastTradeNumber = assignRef.m_lastTradeNumber;
+	this->m_logStreamType = assignRef.m_logStreamType;
+	this->m_stockSymbol = assignRef.m_stockSymbol;
+	return(*this);
+}
+
 MatchingEngine::~MatchingEngine()
 {
 	m_BuyOrderQueue.erase(m_BuyOrderQueue.begin(), m_BuyOrderQueue.end());
@@ -50,8 +77,12 @@ void MatchingEngine::writeToLog(const std::string& logMessage)
 void MatchingEngine::setStockSymbol(const std::string& stockSymbolName) 
 {
 	m_stockSymbol= stockSymbolName;
-	setOutPutLogFileStream();
 } 
+
+void MatchingEngine::setOutPutStream()
+{
+	setOutPutLogFileStream();
+}
 
 void MatchingEngine::setOutPutLogFileStream()
 {

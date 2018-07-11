@@ -8,3 +8,4 @@ do
 done
 
 g++ $1 *.o -o OrderMatchingEngine -lpthread
+rm -f *.o
