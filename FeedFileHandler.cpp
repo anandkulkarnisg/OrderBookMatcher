@@ -28,7 +28,6 @@ void FeedFileHandler::buildTupleItems()
 			m_tupleItems.push_back(std::make_tuple(tokenItems[0], tokenItems[1], tokenItems[2][0]));
 		}
 	}
-
 	m_inputFileStream.close();
 }
 
@@ -59,8 +58,8 @@ void FeedFileHandler::process()
 	// Now submit each item of matcher to the threadPool.
 	for(auto& iter : matchers)
 	{
-		auto func = std::bind(&StockMatcher::executeMatching, &iter);			
-		results.emplace_back(m_pool.enqueue(func));		
+		auto func = std::bind(&StockMatcher::executeMatching, &iter);
+		results.emplace_back(m_pool.enqueue(func));
 	}
 
 	// Now wait for the results.
