@@ -6,6 +6,10 @@ using namespace std;
 
 long OrderValidator::seqId = 0;
 
+// Synopsis : Name : validateOrder
+// This method esentially returns a status of true or false. If the status is false then the order parsed is invalid and the error message is returned via second element of the pair in tuple.
+// If the order validation is successfull then we return the status as true. The error string would be empty and Order returned would be valid one to be used.
+
 std::tuple<std::pair<bool,std::string>,Order> OrderValidator::validateOrder(const std::string& inputOrderString)
 {
     // Let us have a blank orderType that is returned and not used if the message parsing fails.

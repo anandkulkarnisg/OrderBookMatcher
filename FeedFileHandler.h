@@ -20,6 +20,8 @@ class FeedFileHandler
 
 	public:
 		FeedFileHandler(const std::string& fileName, ThreadPool& pool);
+		FeedFileHandler(const FeedFileHandler&) = delete;
+		FeedFileHandler& operator=(const FeedFileHandler&) = delete;
 		void process();
 
 	private:

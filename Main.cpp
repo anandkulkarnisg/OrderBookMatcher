@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	{
 		FeedFileHandler handler(argv[1],pool);
 		handler.process();
-		exit(0);
+		return(0);
 	}
 
 	if(argc != 4 && argc != 2)
