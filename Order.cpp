@@ -93,6 +93,7 @@ bool operator < (const Order& lhs, const Order& rhs)
 	{
 		return(lhs.getSeqId() < rhs.getSeqId());
 	}
+ return(false);
 }
 
 bool operator > (const Order& lhs, const Order& rhs)
@@ -112,6 +113,7 @@ bool operator > (const Order& lhs, const Order& rhs)
 	{
 		return(lhs.getSeqId() < rhs.getSeqId());
 	}
+ return(false);
 }
 
 bool operator == (const Order& lhs, const Order& rhs)

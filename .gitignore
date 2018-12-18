@@ -4,3 +4,11 @@ inftec.output.log
 wiprot.output.log
 myntra.output.log
 techma.output.log
+
+#From tool cmakegit.
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.swp
+valgrind.csv
