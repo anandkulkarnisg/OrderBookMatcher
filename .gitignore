@@ -1,9 +1,11 @@
 OrderMatchingEngine
+
 sintex.output.log
 inftec.output.log
 wiprot.output.log
 myntra.output.log
 techma.output.log
+*.log
 
 #From tool cmakegit.
 CMakeCache.txt
